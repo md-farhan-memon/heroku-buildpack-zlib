@@ -1,0 +1,31 @@
+#!/bin/sh
+
+https://www.dropbox.com/s/kwrxv9r6oax5ng3/zlib-1.2.9.tar.gz?dl=1
+
+indent() {
+    sed -u 's/^/       /'
+}
+
+echo "-----> Installing zlib-1.2.9"
+
+BUILD_DIR=$1
+VENDOR_DIR="vendor"
+DOWNLOAD_URL="https://www.dropbox.com/s/kwrxv9r6oax5ng3/zlib-1.2.9.tar.gz?dl=1"
+
+echo "DOWNLOAD_URL = " $DOWNLOAD_URL | indent
+
+cd $BUILD_DIR
+mkdir -p $VENDOR_DIR
+cd $VENDOR_DIR
+mkdir -p zlib
+cd zlib
+
+echo "-----> Downloading and extracting from " $DOWNLOAD_URL
+curl -L --silent $DOWNLOAD_URL | tar -xvf --strip-components=1
+cd zlib-1.2.9
+sudo -s
+./configure; make; make install
+cd /lib/x86_64-linux-gnu
+ln -s -f /usr/local/lib/libz.so.1.2.9/lib libz.so.1
+cd ~
+rm -rf zlib-1.2.9
